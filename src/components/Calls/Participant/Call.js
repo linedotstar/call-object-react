@@ -156,7 +156,7 @@ export default function Call() {
       );
       if (isLarge) {
         largeTiles.push(tile);
-      } else {
+      } else if (isLocal(id)) {
         smallTiles.push(tile);
       }
     });
