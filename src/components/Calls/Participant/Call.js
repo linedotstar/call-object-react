@@ -23,6 +23,46 @@ export default function Call() {
   const [callState, dispatch] = useReducer(callReducer, initialCallState);
 
   /**
+   * Start listening for new owner participant changes, when the callObject is set.
+   */
+  useEffect(() => {
+    if (!callObject) return;
+
+    function handleParticipantJoinedState({ participant }) {
+      if (participant.owner) {
+        callObject.updateParticipant(participant.session_id, {
+          setSubscribedTracks: { audio: true, video: true, screenVideo: false },
+        });
+      }
+    }
+
+    callObject.on('participant-joined', handleParticipantJoinedState);
+
+    // Stop listening for changes in state
+    return function cleanup() {
+      callObject.off('participant-joined', handleParticipantJoinedState);
+    };
+  }, [callObject]);
+
+  /**
+   * Start listening for new app messages, when the callObject is set.
+   */
+  useEffect(() => {
+    if (!callObject) return;
+
+    function handleAppMessage(event) {
+      console.log(event);
+    }
+
+    callObject.on('app-message', handleAppMessage);
+
+    // Stop listening for changes in state
+    return function cleanup() {
+      callObject.off('app-message', handleAppMessage);
+    };
+  }, [callObject]);
+
+  /**
    * Start listening for participant changes, when the callObject is set.
    */
   useEffect(() => {

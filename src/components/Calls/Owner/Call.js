@@ -25,6 +25,26 @@ export default function OwnerCall() {
   const [callState, dispatch] = useReducer(callReducer, initialCallState);
 
   /**
+   * Subscribe to audience tracks when they join.
+   */
+  useEffect(() => {
+    if (!callObject) return;
+
+    function subscribeToParticipant({ participant }) {
+      callObject.updateParticipant(participant.session_id, {
+        setSubscribedTracks: { audio: false, video: true, screenVideo: false },
+      });
+    }
+
+    callObject.on('participant-joined', subscribeToParticipant);
+    
+    // Stop listening for changes in state
+    return function cleanup() {
+      callObject.off('participant-joined', subscribeToParticipant);
+    };
+  }, [callObject]);
+
+  /**
    * Start listening for participant changes, when the callObject is set.
    */
   useEffect(() => {

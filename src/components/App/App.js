@@ -47,7 +47,7 @@ export default function App() {
    * events.
    */
   const startJoiningCall = useCallback((url, token) => {
-    const newCallObject = DailyIframe.createCallObject({ token });
+    const newCallObject = DailyIframe.createCallObject({ token, subscribeToTracksAutomatically: false });
     setRoomUrl(url);
     setCallObject(newCallObject);
     setAppState(STATE_JOINING);
