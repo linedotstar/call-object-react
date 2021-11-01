@@ -79,7 +79,7 @@ export default function App() {
   useEffect(() => {
     const url = roomUrlFromPageUrl();
     const token = tokenFromPageUrl();
-    url && startJoiningCall(url, token);
+    url && token && startJoiningCall(url, token);
   }, [startJoiningCall]);
 
   /**
