@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import Call from '../Call/Call';
+import OwnerView from '../Views/Owner';
+import ParticipantView from '../Views/Participant';
 import StartButton from '../StartButton/StartButton';
+import StartButtonWrapper from '../StartButton/Wrapper';
 import api from '../../api';
 import './App.css';
-import Tray from '../Tray/Tray';
 import CallObjectContext from '../../CallObjectContext';
-import { roomUrlFromPageUrl, pageUrlFromRoomUrl } from '../../urlUtils';
+import { roomUrlFromPageUrl, tokenFromPageUrl, pageUrlFromRoomUrl } from '../../urlUtils';
 import DailyIframe from '@daily-co/daily-js';
 import { logDailyEvent } from '../../logUtils';
 
@@ -45,8 +46,8 @@ export default function App() {
    * be done with the call object for a while and you're no longer listening to its
    * events.
    */
-  const startJoiningCall = useCallback((url) => {
-    const newCallObject = DailyIframe.createCallObject();
+  const startJoiningCall = useCallback((url, token) => {
+    const newCallObject = DailyIframe.createCallObject({ token });
     setRoomUrl(url);
     setCallObject(newCallObject);
     setAppState(STATE_JOINING);
@@ -77,7 +78,8 @@ export default function App() {
    */
   useEffect(() => {
     const url = roomUrlFromPageUrl();
-    url && startJoiningCall(url);
+    const token = tokenFromPageUrl();
+    url && startJoiningCall(url, token);
   }, [startJoiningCall]);
 
   /**
@@ -172,13 +174,15 @@ export default function App() {
     };
   }, [callObject]);
 
+  const localParticipant = callObject && callObject.participants().local;
+
   /**
    * Show the call UI if we're either joining, already joined, or are showing
    * an error.
    */
   const showCall = [STATE_JOINING, STATE_JOINED, STATE_ERROR].includes(
     appState
-  );
+  ) && localParticipant;
 
   /**
    * Only enable the call buttons (camera toggle, leave call, etc.) if we're joined
@@ -213,19 +217,31 @@ export default function App() {
         // that want to access call object state and bind event listeners to the
         // call object, this can be a helpful pattern.
         <CallObjectContext.Provider value={callObject}>
-          <Call roomUrl={roomUrl} />
-          <Tray
-            disabled={!enableCallButtons}
-            onClickLeaveCall={startLeavingCall}
-          />
+          {localParticipant.owner ? (
+            <OwnerView roomUrl={roomUrl} disabled={!enableCallButtons} onClickLeaveCall={startLeavingCall} />
+          ) : (
+            <ParticipantView roomUrl={roomUrl} disabled={!enableCallButtons} onClickLeaveCall={startLeavingCall} />
+          )}
         </CallObjectContext.Provider>
       ) : (
-        <StartButton
+        <StartButtonWrapper>
+          <StartButton
+            disabled={!enableStartButton}
+            onClick={() => {
+              createCall().then((url) => startJoiningCall(url, process.env.REACT_APP_OWNER_TOKEN));
+            }}
+          >
+            Join as owner
+          </StartButton>
+          <StartButton
           disabled={!enableStartButton}
           onClick={() => {
-            createCall().then((url) => startJoiningCall(url));
+            createCall().then((url) => startJoiningCall(url, process.env.REACT_APP_PARTICIPANT_TOKEN));
           }}
-        />
+        >
+          Join as participant
+        </StartButton>
+      </StartButtonWrapper>
       )}
     </div>
   );

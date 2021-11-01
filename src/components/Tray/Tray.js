@@ -13,14 +13,14 @@ import { logDailyEvent } from '../../logUtils';
 import DailyIframe from '@daily-co/daily-js';
 
 /**
- * Gets [isCameraMuted, isMicMuted, isSharingScreen].
+ * Gets [isCameraMuted, isMicMuted, canUnmuteMic].
  * This function is declared outside Tray() so it's not recreated every render
  * (which would require us to declare it as a useEffect dependency).
  */
 function getStreamStates(callObject) {
   let isCameraMuted,
     isMicMuted,
-    isSharingScreen = false;
+    canUnmuteMic = false;
   if (
     callObject &&
     callObject.participants() &&
@@ -29,9 +29,9 @@ function getStreamStates(callObject) {
     const localParticipant = callObject.participants().local;
     isCameraMuted = !localParticipant.video;
     isMicMuted = !localParticipant.audio;
-    isSharingScreen = localParticipant.screen;
+    canUnmuteMic = localParticipant.owner || !isMicMuted;
   }
-  return [isCameraMuted, isMicMuted, isSharingScreen];
+  return [isCameraMuted, isMicMuted, canUnmuteMic];
 }
 
 /**
@@ -43,7 +43,7 @@ export default function Tray(props) {
   const callObject = useContext(CallObjectContext);
   const [isCameraMuted, setCameraMuted] = useState(false);
   const [isMicMuted, setMicMuted] = useState(false);
-  const [isSharingScreen, setSharingScreen] = useState(false);
+  const [canUnmuteMic, setCanUnmuteMic] = useState(false);
   const [displayChat, setChatDisplay] = useState(false);
   const [highlightedChat, setChatHighlight] = useState(false);
 
@@ -53,12 +53,6 @@ export default function Tray(props) {
 
   function toggleMic() {
     callObject.setLocalAudio(isMicMuted);
-  }
-
-  function toggleSharingScreen() {
-    isSharingScreen
-      ? callObject.stopScreenShare()
-      : callObject.startScreenShare();
   }
 
   function leaveCall() {
@@ -85,12 +79,12 @@ export default function Tray(props) {
 
     function handleNewParticipantsState(event) {
       event && logDailyEvent(event);
-      const [isCameraMuted, isMicMuted, isSharingScreen] = getStreamStates(
+      const [isCameraMuted, isMicMuted, canUnmuteMic] = getStreamStates(
         callObject
       );
       setCameraMuted(isCameraMuted);
       setMicMuted(isMicMuted);
-      setSharingScreen(isSharingScreen);
+      setCanUnmuteMic(canUnmuteMic);
     }
 
     // Use initial state
@@ -113,18 +107,12 @@ export default function Tray(props) {
         highlighted={isCameraMuted}
         onClick={toggleCamera}
       />
-      <TrayButton
-        type={TYPE_MUTE_MIC}
-        disabled={props.disabled}
-        highlighted={isMicMuted}
-        onClick={toggleMic}
-      />
-      {DailyIframe.supportedBrowser().supportsScreenShare && (
+      {canUnmuteMic &&  (
         <TrayButton
-          type={TYPE_SCREEN}
+          type={TYPE_MUTE_MIC}
           disabled={props.disabled}
-          highlighted={isSharingScreen}
-          onClick={toggleSharingScreen}
+          highlighted={isMicMuted}
+          onClick={toggleMic}
         />
       )}
       <TrayButton
