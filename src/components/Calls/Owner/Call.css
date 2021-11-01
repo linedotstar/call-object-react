@@ -3,3 +3,13 @@
 	grid-template-columns: repeat(5, 1fr);
 	grid-gap: 5vh 5vw;
 }
+
+.call.owner .tile.small {
+  width: 100%;
+  overflow: hidden;  
+}
+
+.call.owner .tile.small video {
+  top: 50%;
+  transform: translateY(-50%);
+}

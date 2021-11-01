@@ -171,7 +171,7 @@ export default function OwnerCall() {
   const tiles = getTiles();
   const message = getMessage(callState);
   return (
-    <div className="call">
+    <div className="call owner">
       <div className="tiles">{tiles}</div>
       <ParticipantList />
       {message && (
