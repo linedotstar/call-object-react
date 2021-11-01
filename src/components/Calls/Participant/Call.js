@@ -51,7 +51,9 @@ export default function Call() {
     if (!callObject) return;
 
     function handleAppMessage(event) {
-      console.log(event);
+      if (event.data && event.data.sessionId && event.data.subscriptions) {
+        callObject.updateParticipant(event.data.sessionId, { setSubscribedTracks: event.data.subscriptions });
+      }
     }
 
     callObject.on('app-message', handleAppMessage);
@@ -175,7 +177,7 @@ export default function Call() {
     let largeTiles = [];
     let smallTiles = [];
     Object.entries(callState.callItems).forEach(([id, callItem]) => {
-      const isLarge = (callItem.audioTrackState || {}).state === 'playable' &&
+      const isLarge = (callItem.videoTrackState || {}).state === 'playable' &&
         (isScreenShare(id) || (!isLocal(id) && !containsScreenShare(callState.callItems)));
       const tile = (
         <Tile

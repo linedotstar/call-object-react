@@ -13,11 +13,20 @@ export default function TileControls(props) {
 
   const bringOnStage = useCallback(
     () => {
-      callObject &&
-        callObject.updateParticipant(props.sessionId, {
-          setAudio: true,
-          setVideo: true,
-        });
+      if (!callObject) {
+        return;
+      }
+
+      // Turn on the guest's audio and video settings
+      callObject.updateParticipant(props.sessionId, {
+        setAudio: true,
+        setVideo: true,
+        setSubscribedTracks: { audio: true, video: true, screenVideo: false },
+      });
+      
+      // Tell all participants to subscribe to the guest's audio and video tracks
+      callObject.sendAppMessage({ sessionId: props.sessionId, subscriptions: { audio: true, video: true } });
+
       setOnStage(true);
     },
     [callObject]
@@ -25,11 +34,20 @@ export default function TileControls(props) {
 
   const takeOffStage = useCallback(
     () => {
-      callObject &&
-        callObject.updateParticipant(props.sessionId, {
-          setAudio: false,
-          setVideo: true,
-        });
+      if (!callObject) {
+        return;
+      }
+
+      // Turn off the guest's audio settings
+      callObject.updateParticipant(props.sessionId, {
+        setAudio: false,
+        setVideo: true,
+        setSubscribedTracks: { audio: false, video: true, screenVideo: false },
+      });
+
+      // Tell all participants to unsubscribe from the guest's audio and video tracks
+      callObject.sendAppMessage({ sessionId: props.sessionId, subscriptions: { audio: false, video: false } });
+      
       setOnStage(false);
     },
     [callObject]
