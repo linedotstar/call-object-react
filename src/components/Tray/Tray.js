@@ -13,14 +13,13 @@ import { logDailyEvent } from '../../logUtils';
 import DailyIframe from '@daily-co/daily-js';
 
 /**
- * Gets [isCameraMuted, isMicMuted, canUnmuteMic].
+ * Gets [isCameraMuted, isMicMuted].
  * This function is declared outside Tray() so it's not recreated every render
  * (which would require us to declare it as a useEffect dependency).
  */
 function getStreamStates(callObject) {
   let isCameraMuted,
-    isMicMuted,
-    canUnmuteMic = false;
+    isMicMuted;
   if (
     callObject &&
     callObject.participants() &&
@@ -29,9 +28,8 @@ function getStreamStates(callObject) {
     const localParticipant = callObject.participants().local;
     isCameraMuted = !localParticipant.video;
     isMicMuted = !localParticipant.audio;
-    canUnmuteMic = localParticipant.owner || !isMicMuted;
   }
-  return [isCameraMuted, isMicMuted, canUnmuteMic];
+  return [isCameraMuted, isMicMuted];
 }
 
 /**
@@ -43,7 +41,6 @@ export default function Tray(props) {
   const callObject = useContext(CallObjectContext);
   const [isCameraMuted, setCameraMuted] = useState(false);
   const [isMicMuted, setMicMuted] = useState(false);
-  const [canUnmuteMic, setCanUnmuteMic] = useState(false);
   const [displayChat, setChatDisplay] = useState(true);
   const [highlightedChat, setChatHighlight] = useState(false);
 
@@ -79,12 +76,11 @@ export default function Tray(props) {
 
     function handleNewParticipantsState(event) {
       event && logDailyEvent(event);
-      const [isCameraMuted, isMicMuted, canUnmuteMic] = getStreamStates(
+      const [isCameraMuted, isMicMuted] = getStreamStates(
         callObject
       );
       setCameraMuted(isCameraMuted);
       setMicMuted(isMicMuted);
-      setCanUnmuteMic(canUnmuteMic);
     }
 
     // Use initial state
@@ -107,14 +103,12 @@ export default function Tray(props) {
         highlighted={isCameraMuted}
         onClick={toggleCamera}
       />
-      {canUnmuteMic &&  (
-        <TrayButton
-          type={TYPE_MUTE_MIC}
-          disabled={props.disabled}
-          highlighted={isMicMuted}
-          onClick={toggleMic}
-        />
-      )}
+      <TrayButton
+        type={TYPE_MUTE_MIC}
+        disabled={props.disabled}
+        highlighted={isMicMuted}
+        onClick={toggleMic}
+      />
       <TrayButton
         type={TYPE_CHAT}
         disabled={props.disabled}
