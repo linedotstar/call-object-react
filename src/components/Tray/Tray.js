@@ -11,6 +11,7 @@ import Chat from '../Chat/Chat';
 import CallObjectContext from '../../CallObjectContext';
 import { logDailyEvent } from '../../logUtils';
 import DailyIframe from '@daily-co/daily-js';
+import DeviceSelector from '../DeviceSelector/DeviceSelector';
 
 /**
  * Gets [isCameraMuted, isMicMuted].
@@ -97,18 +98,21 @@ export default function Tray(props) {
 
   return (
     <div className="tray">
+
       <TrayButton
         type={TYPE_MUTE_CAMERA}
         disabled={props.disabled}
         highlighted={isCameraMuted}
         onClick={toggleCamera}
       />
+      <DeviceSelector type='video' />
       <TrayButton
         type={TYPE_MUTE_MIC}
         disabled={props.disabled}
         highlighted={isMicMuted}
         onClick={toggleMic}
       />
+      <DeviceSelector type='audio' />
       <TrayButton
         type={TYPE_CHAT}
         disabled={props.disabled}
