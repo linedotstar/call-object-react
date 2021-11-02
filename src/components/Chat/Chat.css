@@ -1,15 +1,18 @@
 .chat {
   position: absolute;
-  right: 10px;
-  bottom: 75px;
+  right: 0px;
+  bottom: 60px;
   width: 250px;
-  height: calc(100% - 150px);
-  background-color: rgba(256, 256, 256, 0.4);
+  height: calc(100% - 60px);
+  /*background-color: rgba(256, 256, 256, 0.4);*/
+  background-color: transparent;
   border-radius: 4px;
 }
 
 .messageList {
   padding: 10px;
+  color: #ffffff;
+  text-shadow: 0px 0px 10px #000;
 }
 
 .chat-input {
