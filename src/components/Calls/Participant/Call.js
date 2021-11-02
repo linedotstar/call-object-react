@@ -208,7 +208,7 @@ export default function Call() {
   const [largeTiles, smallTiles] = getTiles();
   const message = getMessage(callState);
   return (
-    <div className="call">
+    <div className="call participant">
       <div className="large-tiles">
         {
           !message

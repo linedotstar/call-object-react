@@ -44,7 +44,7 @@ export default function Tray(props) {
   const [isCameraMuted, setCameraMuted] = useState(false);
   const [isMicMuted, setMicMuted] = useState(false);
   const [canUnmuteMic, setCanUnmuteMic] = useState(false);
-  const [displayChat, setChatDisplay] = useState(false);
+  const [displayChat, setChatDisplay] = useState(true);
   const [highlightedChat, setChatHighlight] = useState(false);
 
   function toggleCamera() {

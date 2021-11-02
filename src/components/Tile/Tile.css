@@ -33,6 +33,23 @@
   border-radius: 4px;
 }
 
+.tile.small.rounded {
+  overflow: hidden;
+  height: 100px;
+  width: 100px;
+  border-radius: 50em;
+}
+
+.tile.small.rounded .background {
+  padding-top: 0;
+}
+
+.tile.small.rounded video {
+  top: 50%;
+  left:  50%;
+  transform: translate(-50%, -50%) scale(2);
+}
+
 .tile .overlay {
   position: absolute;
   color: #ffffff;
@@ -47,7 +64,7 @@
 .tile .corner {
   position: absolute;
   color: #ffffff;
-  background-color: #000000;
+  background-color: rgba(0,0,0,0.2);
   padding: 10px;
   margin: 0;
   bottom: 0;

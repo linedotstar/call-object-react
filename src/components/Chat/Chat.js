@@ -37,6 +37,10 @@ export default function Chat(props) {
     }
 
     function handleAppMessage(event) {
+      if (!event.data.message) {
+        return;
+      }
+
       const participants = callObject.participants();
       const name = participants[event.fromId].user_name
         ? participants[event.fromId].user_name

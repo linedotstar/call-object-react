@@ -1,0 +1,10 @@
+.call.participant .large-tiles {
+  height: 100%;
+  width: 144%;
+}
+
+.call.participant .small-tiles {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
