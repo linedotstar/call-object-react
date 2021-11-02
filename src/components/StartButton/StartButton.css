@@ -1,12 +1,15 @@
 .start-button {
-  padding: 20px 30px;
-  background: #ffffff;
+  font-size:  18px;
+  padding: 0.666em 2.22em;
+  border-radius:  1.4em;
+  background: #ce0058;
   font-family: Helvetica Neue;
   font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
+  font-weight: 600;
   text-align: center;
-  color: #4a4a4a;
-  background-color: #ffffff;
+  color: #ffffff;
+  background-color: #ce0058;
+  cursor: pointer;
+  border: 1px solid #ce0058;
+  margin-bottom: 1vh;
 }
