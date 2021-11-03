@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import css from './DeviceSelector.css';
 import CallObjectContext from '../../CallObjectContext';
 
 const DEVICE_MAP = {
@@ -9,6 +10,7 @@ const DEVICE_MAP = {
 export default function DeviceSelector(props) {
 	const callObject = useContext(CallObjectContext);
   const [devices, setDevices] = useState([]);
+  const [open, setOpen] = useState(false);
   const [currentDeviceId, setCurrentDeviceId] = useState([]);
   const { type } = props;
   
@@ -25,23 +27,41 @@ export default function DeviceSelector(props) {
     });
   }, [callObject]);
 
-  function onSelect(e) {
-    console.log(e.target.value);
-    const updates = {};
-    updates[`${type}DeviceId`] = e.target.value;
-    callObject.setInputDevices(updates);
+  function onSelect(deviceId) {
+    callObject.setInputDevices({ [`${type}DeviceId`]: deviceId });
+    setCurrentDeviceId(deviceId);
+    setOpen(false);
   }
 
   return (
-    <select 
-      className='devices'
-      onChange={onSelect}
-    >
-      {devices.map(({kind, label, deviceId}, index) => (
-        <option key={`device-${index}`} value={deviceId} selected={deviceId === currentDeviceId ? 'selected' : null}>
-          {label}
-        </option>
-      ))}
-    </select>
+    <div className='device-selector'>
+      <button onClick={() => setOpen(!open)}>^</button>
+      
+      {open && (
+        <ul className='device-menu'>
+          {devices.map(({label, deviceId}, index) => (
+            <li 
+              key={`device-${index}`} 
+              onClick={() => onSelect(deviceId)} 
+              className={deviceId === currentDeviceId ? 'selected' : null}
+            >
+              {label}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
+
+
+// <select 
+//   className='devices'
+//   onChange={onSelect}
+// >
+//   {devices.map(({label, deviceId}, index) => (
+//     <option key={`device-${index}`} value={deviceId} selected={deviceId === currentDeviceId ? 'selected' : null}>
+//       {label}
+//     </option>
+//   ))}
+// </select>

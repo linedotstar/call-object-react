@@ -1,0 +1,29 @@
+.device-selector {
+  position: relative;
+
+}
+
+.device-selector button {
+  border:  1px solid #000;
+  border-radius: 3px;
+}
+
+.device-selector .device-menu {
+  position: absolute;
+  top: 0;
+  left:  0;
+  transform: translateY(calc(-100% - 20px));
+  background: #ffffff;
+  list-style-type: none;
+  margin:  0;
+  padding:  0;
+  min-width: 200px;
+}
+
+.device-selector .device-menu li {
+  padding: 2px 5px;
+}
+
+.device-selector .device-menu li.selected, .device-selector .device-menu li:hover {
+  background: lightblue;
+}
