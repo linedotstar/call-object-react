@@ -142,6 +142,10 @@ export default function OwnerCall() {
     };
   }, []);
 
+  function updateCue(cue) {
+    callObject && callObject.sendAppMessage({ cue });
+  }
+
   function getTiles() {
     let tiles = [];
     Object.entries(callState.callItems).forEach(([id, callItem]) => {
@@ -172,6 +176,11 @@ export default function OwnerCall() {
   const message = getMessage(callState);
   return (
     <div className="call owner">
+      <div>
+        <button onClick={() => updateCue(1)}>Cue 1</button>
+        <button onClick={() => updateCue(2)}>Cue 2</button>
+        <button onClick={() => updateCue(3)}>Cue 3</button>
+      </div>
       <div className="tiles">{tiles}</div>
       <ParticipantList />
       {message && (

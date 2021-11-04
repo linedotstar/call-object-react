@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useReducer, useCallback } from 'react';
 import './Call.css';
 import '../Call.css';
+import Cue from '../../Cue/Cue';
 import Tile from '../../Tile/Tile';
 import CallObjectContext from '../../../CallObjectContext';
 import CallMessage from '../../CallMessage/CallMessage';
@@ -209,6 +210,7 @@ export default function Call() {
   const message = getMessage(callState);
   return (
     <div className="call participant">
+      <Cue />
       <div className="large-tiles">
         {
           !message
