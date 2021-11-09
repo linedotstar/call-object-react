@@ -33,21 +33,32 @@
   border-radius: 4px;
 }
 
-.tile.small.rounded {
+.tile.small.squared {
   overflow: hidden;
   height: 100px;
   width: 100px;
-  border-radius: 50em;
 }
 
-.tile.small.rounded .background {
+.tile.small.squared .background {
   padding-top: 0;
 }
 
-.tile.small.rounded video {
+.tile.small.squared video {
   top: 50%;
   left:  50%;
   transform: translate(-50%, -50%) scale(2);
+}
+
+.tile.pip {
+  position: absolute;
+  top: 1vh;
+  right: 1vw;
+  z-index: 10;
+  box-shadow: 0px 0px 25px #000;
+  height: 25vw !important;
+  width: 25vw !important;
+  max-width: 200px;
+  max-height: 200px;
 }
 
 .tile .overlay {

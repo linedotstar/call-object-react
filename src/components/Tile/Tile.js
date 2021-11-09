@@ -35,6 +35,7 @@ function getTrackUnavailableMessage(kind, trackState) {
  * - audioTrackState: DailyTrackState?
  * - isLocalPerson: boolean
  * - isLarge: boolean
+ * - isPiP: boolean
  * - disableCornerMessage: boolean
  * - onClick: Function
  */
@@ -119,7 +120,8 @@ export default function Tile(props) {
 
   function getClassNames() {
     let classNames = 'tile';
-    classNames += props.isLarge ? ' large' : ' small rounded';
+    classNames += props.isLarge ? ' large' : ' small squared';
+    props.isPiP && (classNames += ' pip');
     props.isLocalPerson && (classNames += ' local');
     return classNames;
   }

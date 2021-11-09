@@ -60,7 +60,6 @@ export default function Call() {
     if (!callObject) return;
 
     function handleAppMessage(event) {
-      debugger;
       if (event.data && event.data.sessionId && event.data.subscriptions) {
         callObject.updateParticipant(event.data.sessionId, { setSubscribedTracks: event.data.subscriptions });
         dispatch({
@@ -187,11 +186,19 @@ export default function Call() {
     [callObject]
   );
 
+  function pipMode() {
+    const { hostId, guestId } = callState;
+    return hostId && guestId;
+  }
+
   function getTiles() {
-    let largeTiles = [];
-    let smallTiles = [];
+    let stageTiles = [];
+    let galleryTiles = [];
     Object.entries(callState.callItems).forEach(([id, callItem]) => {
-      const isLarge = (callItem.videoTrackState || {}).state === 'playable' && (isHost(callItem.sessionId, callState) || isGuest(callItem.sessionId, callState));
+      const host = isHost(callItem.sessionId, callState);
+      const guest = isGuest(callItem.sessionId, callState);
+      const isStage = (callItem.videoTrackState || {}).state === 'playable' && (guest || host);
+      const isLarge = isStage && (guest || (host && !pipMode()));
       console.log(isHost(id, callState));
       const tile = (
         <Tile
@@ -200,6 +207,7 @@ export default function Call() {
           audioTrackState={callItem.audioTrackState}
           isLocalPerson={isLocal(id)}
           isLarge={isLarge}
+          isPiP={host && pipMode()}
           disableCornerMessage={isScreenShare(id)}
           onClick={
             isLocal(id)
@@ -210,16 +218,16 @@ export default function Call() {
           }
         />
       );
-      if (isLarge) {
-        largeTiles.push(tile);
+      if (isStage) {
+        stageTiles.push(tile);
       } else if (isLocal(id)) {
-        smallTiles.push(tile);
+        galleryTiles.push(tile);
       }
     });
-    return [largeTiles, smallTiles];
+    return [stageTiles, galleryTiles];
   }
 
-  const [largeTiles, smallTiles] = getTiles();
+  const [stageTiles, galleryTiles] = getTiles();
   const message = getMessage(callState);
   return (
     <div className="call participant">
@@ -227,11 +235,11 @@ export default function Call() {
       <div className="large-tiles">
         {
           !message
-            ? largeTiles
+            ? stageTiles
             : null /* Avoid showing large tiles to make room for the message */
         }
       </div>
-      <div className="small-tiles">{smallTiles}</div>
+      <div className="small-tiles">{galleryTiles}</div>
       {message && (
         <CallMessage
           header={message.header}
