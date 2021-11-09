@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useReducer, useCallback } from 'react';
 import './Call.css';
 import '../Call.css';
+import Gallery from './Gallery';
 import Cue from '../../Cue/Cue';
 import Tile from '../../Tile/Tile';
 import CallObjectContext from '../../../CallObjectContext';
@@ -175,59 +176,58 @@ export default function Call() {
     };
   }, []);
 
-  /**
-   * Send an app message to the remote participant whose tile was clicked on.
-   */
-  const sendHello = useCallback(
-    (participantId) => {
-      callObject &&
-        callObject.sendAppMessage({ hello: 'world' }, participantId);
-    },
-    [callObject]
-  );
-
   function pipMode() {
     const { hostId, guestId } = callState;
     return hostId && guestId;
   }
 
-  function getTiles() {
-    let stageTiles = [];
-    let galleryTiles = [];
-    Object.entries(callState.callItems).forEach(([id, callItem]) => {
-      const host = isHost(callItem.sessionId, callState);
-      const guest = isGuest(callItem.sessionId, callState);
-      const isStage = (callItem.videoTrackState || {}).state === 'playable' && (guest || host);
-      const isLarge = isStage && (guest || (host && !pipMode()));
-      console.log(isHost(id, callState));
-      const tile = (
-        <Tile
-          key={id}
-          videoTrackState={callItem.videoTrackState}
-          audioTrackState={callItem.audioTrackState}
-          isLocalPerson={isLocal(id)}
-          isLarge={isLarge}
-          isPiP={host && pipMode()}
-          disableCornerMessage={isScreenShare(id)}
-          onClick={
-            isLocal(id)
-              ? null
-              : () => {
-                  sendHello(id);
-                }
-          }
-        />
-      );
-      if (isStage) {
-        stageTiles.push(tile);
-      } else if (isLocal(id)) {
-        galleryTiles.push(tile);
-      }
-    });
-    return [stageTiles, galleryTiles];
+  function getHostTile() {
+    const { callItems, hostId } = callState;
+
+    const hostItem = callItems[hostId];
+
+    if (!hostItem) {
+      return null;
+    }
+
+    return (
+      <Tile
+        videoTrackState={hostItem.videoTrackState}
+        audioTrackState={hostItem.audioTrackState}
+        isLarge={!pipMode()}
+        isPiP={pipMode()}
+        disableCornerMessage={true}
+      />
+    );
   }
 
-  const [stageTiles, galleryTiles] = getTiles();
+  function getGuestTile() {
+    const { callItems, guestId } = callState;
+
+    if (!guestId) {
+      return null;
+    }    
+
+    const guestItem = Object.values(callItems).find((callItem) => {
+      return callItem.sessionId && callItem.sessionId === guestId;
+    });
+
+    if (!guestItem) {
+      return null;
+    }
+
+    return (
+      <Tile
+        videoTrackState={guestItem.videoTrackState}
+        audioTrackState={guestItem.audioTrackState}
+        isLarge={true}
+        isPiP={false}
+        disableCornerMessage={true}
+      />
+    );
+  }
+
+  const tiles = [getHostTile(), getGuestTile()];
   const message = getMessage(callState);
   return (
     <div className="call participant">
@@ -235,11 +235,11 @@ export default function Call() {
       <div className="large-tiles">
         {
           !message
-            ? stageTiles
+            ? tiles
             : null /* Avoid showing large tiles to make room for the message */
         }
       </div>
-      <div className="small-tiles">{galleryTiles}</div>
+      <Gallery callState={callState} />
       {message && (
         <CallMessage
           header={message.header}
