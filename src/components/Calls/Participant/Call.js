@@ -4,6 +4,7 @@ import '../Call.css';
 import Gallery from './Gallery';
 import Cue from '../../Cue/Cue';
 import Tile from '../../Tile/Tile';
+import Chat from '../../Chat/Chat';
 import CallObjectContext from '../../../CallObjectContext';
 import CallMessage from '../../CallMessage/CallMessage';
 import {
@@ -239,6 +240,7 @@ export default function Call() {
             : null /* Avoid showing large tiles to make room for the message */
         }
       </div>
+      <Chat />
       <Gallery callState={callState} />
       {message && (
         <CallMessage

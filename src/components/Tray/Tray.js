@@ -42,7 +42,6 @@ export default function Tray(props) {
   const callObject = useContext(CallObjectContext);
   const [isCameraMuted, setCameraMuted] = useState(false);
   const [isMicMuted, setMicMuted] = useState(false);
-  const [displayChat, setChatDisplay] = useState(false);
   const [highlightedChat, setChatHighlight] = useState(false);
 
   function toggleCamera() {
@@ -55,17 +54,6 @@ export default function Tray(props) {
 
   function leaveCall() {
     props.onClickLeaveCall && props.onClickLeaveCall();
-  }
-
-  function toggleChat() {
-    setChatDisplay(!displayChat);
-    if (highlightedChat) {
-      setChatHighlight(!highlightedChat);
-    }
-  }
-
-  function handleNewChat() {
-    setChatHighlight(!highlightedChat);
   }
 
   /**
@@ -113,13 +101,6 @@ export default function Tray(props) {
         onClick={toggleMic}
       />
       <DeviceSelector type='audio' />
-      <TrayButton
-        type={TYPE_CHAT}
-        disabled={props.disabled}
-        highlighted={highlightedChat}
-        onClick={toggleChat}
-      />
-      <Chat onClickDisplay={displayChat} notification={handleNewChat} />
       <TrayButton
         type={TYPE_LEAVE}
         disabled={props.disabled}

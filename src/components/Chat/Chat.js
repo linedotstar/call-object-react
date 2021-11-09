@@ -65,7 +65,7 @@ export default function Chat(props) {
 
   useEffect(() => {}, [chatHistory]);
 
-  return props.onClickDisplay ? (
+  return (
     <div className="chat">
       {chatHistory.map((entry, index) => (
         <div key={`entry-${index}`} className="messageList">
@@ -87,5 +87,5 @@ export default function Chat(props) {
         </button>
       </form>
     </div>
-  ) : null;
+  );
 }

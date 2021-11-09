@@ -1,9 +1,32 @@
+.call.participant {
+	display: grid;
+  grid-template-areas: 
+    "cue cue"
+    "call chat"
+    "gallery chat";
+  grid-template-columns: 1fr 250px;
+  grid-template-rows: 50px 1fr 100px;
+}
+
+@media (max-width: 800px) {
+  .call.participant {
+    grid-template-areas: 
+      "cue cue"
+      "call call"
+      "gallery chat";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 50px 1fr 1fr;   
+  }
+}
+
 .call.participant .large-tiles {
+  grid-area:  call;
   max-height: 100%;
   max-width: 100%;
 }
 
 .call.participant .small-tiles {
+	grid-area:  gallery;
 	position: absolute;
 	left: 0;
 	bottom: 0;

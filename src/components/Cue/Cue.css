@@ -1,3 +1,7 @@
+.cue {
+	grid-area:  cue;
+}
+
 .cue1 {
 	background-color: blue;
 }
