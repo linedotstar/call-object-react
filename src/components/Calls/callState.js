@@ -161,8 +161,7 @@ function getMessage(callState) {
   } else if (shouldShowClickAllow()) {
     header = 'Click "Allow" to enable camera and mic access';
   } else if (Object.keys(callState.callItems).length === 1) {
-    header = "Copy and share this page's URL to invite others";
-    detail = window.location.href;
+    header = "Please wait for others to join";
   }
   return header || detail ? { header, detail, isError } : null;
 }
