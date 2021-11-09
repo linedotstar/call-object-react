@@ -19,6 +19,7 @@ const initialCallState = {
   clickAllowTimeoutFired: false,
   camOrMicError: null,
   fatalError: null,
+  hostId: null,
 };
 
 // --- Actions ---
@@ -35,6 +36,20 @@ const CLICK_ALLOW_TIMEOUT = 'CLICK_ALLOW_TIMEOUT';
  * - participants: Object (from Daily callObject.participants())
  */
 const PARTICIPANTS_CHANGE = 'PARTICIPANTS_CHANGE';
+
+/**
+ * HOST_CHANGE action structure:
+ * - type: string
+ * - hostId: string
+ */
+const HOST_CHANGE = 'HOST_CHANGE';
+
+/**
+ * GUEST_CHANGE action structure:
+ * - type: string
+ * - guestId: string
+ */
+const GUEST_CHANGE = 'GUEST_CHANGE';
 
 /**
  * CAM_OR_MIC_ERROR action structure:
@@ -65,6 +80,10 @@ function callReducer(callState, action) {
         ...callState,
         callItems,
       };
+    case HOST_CHANGE:
+      return { ...callState, hostId: action.hostId };
+    case GUEST_CHANGE:
+      return { ...callState, guestId: action.guestId };
     case CAM_OR_MIC_ERROR:
       return { ...callState, camOrMicError: action.message };
     case FATAL_ERROR:
@@ -148,10 +167,22 @@ function getMessage(callState) {
   return header || detail ? { header, detail, isError } : null;
 }
 
+function isHost(id, callState) {
+  const { hostId } = callState;
+  return id === hostId;
+}
+
+function isGuest(id, callState) {
+  const { guestId } = callState;
+  return id === guestId;
+}
+
 export {
   initialCallState,
   CLICK_ALLOW_TIMEOUT,
   PARTICIPANTS_CHANGE,
+  HOST_CHANGE,
+  GUEST_CHANGE,
   CAM_OR_MIC_ERROR,
   FATAL_ERROR,
   callReducer,
@@ -159,4 +190,6 @@ export {
   isScreenShare,
   containsScreenShare,
   getMessage,
+  isHost,
+  isGuest,
 };

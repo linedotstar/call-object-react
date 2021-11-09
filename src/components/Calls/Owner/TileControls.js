@@ -25,7 +25,7 @@ export default function TileControls(props) {
       });
       
       // Tell all participants to subscribe to the guest's audio and video tracks
-      callObject.sendAppMessage({ sessionId: props.sessionId, subscriptions: { audio: true, video: true } });
+      callObject.sendAppMessage({ sessionId: props.sessionId, isGuest: true, subscriptions: { audio: true, video: true } });
 
       setOnStage(true);
     },
@@ -46,7 +46,7 @@ export default function TileControls(props) {
       });
 
       // Tell all participants to unsubscribe from the guest's audio and video tracks
-      callObject.sendAppMessage({ sessionId: props.sessionId, subscriptions: { audio: false, video: false } });
+      callObject.sendAppMessage({ sessionId: props.sessionId, isGuest: false, subscriptions: { audio: false, video: false } });
       
       setOnStage(false);
     },

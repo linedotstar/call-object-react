@@ -9,6 +9,8 @@ import {
   initialCallState,
   CLICK_ALLOW_TIMEOUT,
   PARTICIPANTS_CHANGE,
+  HOST_CHANGE,
+  GUEST_CHANGE,
   CAM_OR_MIC_ERROR,
   FATAL_ERROR,
   callReducer,
@@ -16,6 +18,8 @@ import {
   isScreenShare,
   containsScreenShare,
   getMessage,
+  isHost,
+  isGuest,
 } from '../callState';
 import { logDailyEvent } from '../../../logUtils';
 
@@ -33,6 +37,10 @@ export default function Call() {
       if (participant.owner) {
         callObject.updateParticipant(participant.session_id, {
           setSubscribedTracks: { audio: true, video: true, screenVideo: false },
+        });
+        dispatch({
+          type: HOST_CHANGE,
+          hostId: participant.session_id,
         });
       }
     }
@@ -52,8 +60,13 @@ export default function Call() {
     if (!callObject) return;
 
     function handleAppMessage(event) {
+      debugger;
       if (event.data && event.data.sessionId && event.data.subscriptions) {
         callObject.updateParticipant(event.data.sessionId, { setSubscribedTracks: event.data.subscriptions });
+        dispatch({
+          type: GUEST_CHANGE,
+          guestId: event.data.isGuest ? event.data.sessionId : null,
+        });
       }
     }
 
@@ -178,8 +191,8 @@ export default function Call() {
     let largeTiles = [];
     let smallTiles = [];
     Object.entries(callState.callItems).forEach(([id, callItem]) => {
-      const isLarge = (callItem.videoTrackState || {}).state === 'playable' &&
-        (isScreenShare(id) || (!isLocal(id) && !containsScreenShare(callState.callItems)));
+      const isLarge = (callItem.videoTrackState || {}).state === 'playable' && (isHost(callItem.sessionId, callState) || isGuest(callItem.sessionId, callState));
+      console.log(isHost(id, callState));
       const tile = (
         <Tile
           key={id}
