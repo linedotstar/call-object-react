@@ -5,7 +5,6 @@ import Tile from '../../Tile/Tile';
 import TileControls from './TileControls';
 import CallObjectContext from '../../../CallObjectContext';
 import CallMessage from '../../CallMessage/CallMessage';
-import ParticipantList from '../../ParticipantList/ParticipantList';
 import {
   initialCallState,
   CLICK_ALLOW_TIMEOUT,
@@ -182,7 +181,6 @@ export default function OwnerCall() {
         <button onClick={() => updateCue(3)}>Cue 3</button>
       </div>
       <div className="tiles">{tiles}</div>
-      <ParticipantList />
       {message && (
         <CallMessage
           header={message.header}

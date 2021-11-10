@@ -1,21 +1,21 @@
 .call.participant {
 	display: grid;
   grid-template-areas: 
-    "cue cue"
     "call chat"
-    "gallery chat";
+    "gallery chat"
+    "cue cue";
   grid-template-columns: 1fr 250px;
-  grid-template-rows: 50px 1fr 100px;
+  grid-template-rows: 1fr 100px 50px;
 }
 
 @media (max-width: 800px) {
   .call.participant {
     grid-template-areas: 
-      "cue cue"
       "call call"
-      "gallery chat";
+      "gallery chat"
+      "cue cue";
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 50px 1fr 1fr;   
+    grid-template-rows: 1fr 1fr 50px;   
   }
 }
 

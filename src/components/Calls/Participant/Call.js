@@ -232,7 +232,6 @@ export default function Call() {
   const message = getMessage(callState);
   return (
     <div className="call participant">
-      <Cue />
       <div className="large-tiles">
         {
           !message
@@ -242,6 +241,7 @@ export default function Call() {
       </div>
       <Chat />
       <Gallery callState={callState} />
+      <Cue />
       {message && (
         <CallMessage
           header={message.header}
