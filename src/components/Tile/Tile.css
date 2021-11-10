@@ -1,55 +1,23 @@
-.tile.small {
-  width: 200px;
-  margin: 0 10px;
+.tile {
+  width: 100%;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
 }
 
-.tile.large {
-  position: relative;
-  margin: 2px;
-  overflow: hidden;
+.tile .video-wrapper {
+  /*background-color: #000000;*/
 }
 
 .tile video {
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.tile .background {
-  background-color: #000000;
-  width: 100%;
-  padding-top: 56.25%; /* Hard-coded 16:9 aspect ratio */
+  width: 100vw;
+  max-width: 100%;
 }
 
 .tile.local video {
   transform: scale(-1, 1);
-}
-
-.tile.small video {
-  border-radius: 4px;
-}
-
-.tile.small .background {
-  border-radius: 4px;
-}
-
-.tile.small.squared {
-  overflow: hidden;
-  height: 100px;
-  width: 100px;
-}
-
-.tile.small.squared .background {
-  padding-top: 0;
-}
-
-.tile.small.squared video {
-  top: 50%;
-  left:  50%;
-  transform: translate(-50%, -50%) scale(2);
 }
 
 .tile.pip {
@@ -58,10 +26,8 @@
   right: 1vw;
   z-index: 10;
   box-shadow: 0px 0px 25px #000;
-  height: 25vw !important;
   width: 25vw !important;
   max-width: 200px;
-  max-height: 200px;
 }
 
 .tile .overlay {

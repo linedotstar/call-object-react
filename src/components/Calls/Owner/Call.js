@@ -153,7 +153,6 @@ export default function OwnerCall() {
             videoTrackState={callItem.videoTrackState}
             audioTrackState={callItem.audioTrackState}
             isLocalPerson={false}
-            isLarge={false}
             disableCornerMessage={true}
           />
           <TileControls 

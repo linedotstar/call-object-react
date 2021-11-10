@@ -190,7 +190,6 @@ export default function Call() {
       <Tile
         videoTrackState={hostItem.videoTrackState}
         audioTrackState={hostItem.audioTrackState}
-        isLarge={!pipMode()}
         isPiP={pipMode()}
         disableCornerMessage={true}
       />
@@ -216,7 +215,6 @@ export default function Call() {
       <Tile
         videoTrackState={guestItem.videoTrackState}
         audioTrackState={guestItem.audioTrackState}
-        isLarge={true}
         isPiP={false}
         disableCornerMessage={true}
       />

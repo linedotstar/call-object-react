@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
+import { AspectRatio } from 'react-aspect-ratio';
 import './Tile.css';
 
 function getTrackUnavailableMessage(kind, trackState) {
@@ -34,7 +35,6 @@ function getTrackUnavailableMessage(kind, trackState) {
  * - videoTrackState: DailyTrackState?
  * - audioTrackState: DailyTrackState?
  * - isLocalPerson: boolean
- * - isLarge: boolean
  * - isPiP: boolean
  * - disableCornerMessage: boolean
  * - onClick: Function
@@ -80,7 +80,7 @@ export default function Tile(props) {
   }, [audioTrack]);
 
   function getVideoComponent() {
-    return videoTrack && <video autoPlay muted playsInline ref={videoEl} />;
+    return videoTrack && <AspectRatio ratio="16/9" className="video-wrapper"><video autoPlay muted playsInline ref={videoEl} /></AspectRatio>;
   }
 
   function getAudioComponent() {
@@ -120,7 +120,6 @@ export default function Tile(props) {
 
   function getClassNames() {
     let classNames = 'tile';
-    classNames += props.isLarge ? ' large' : ' small squared';
     props.isPiP && (classNames += ' pip');
     props.isLocalPerson && (classNames += ' local');
     return classNames;
@@ -128,7 +127,7 @@ export default function Tile(props) {
 
   return (
     <div className={getClassNames()} onClick={props.onClick}>
-      <div className="background" />
+      
       {getOverlayComponent()}
       {getVideoComponent()}
       {getAudioComponent()}
