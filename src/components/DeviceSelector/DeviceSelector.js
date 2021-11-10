@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import css from './DeviceSelector.css';
+import './DeviceSelector.css';
 import CallObjectContext from '../../CallObjectContext';
 
 const DEVICE_MAP = {

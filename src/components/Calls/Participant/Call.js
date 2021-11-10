@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useReducer, useCallback } from 'react';
+import React, { useEffect, useContext, useReducer } from 'react';
 import './Call.css';
 import '../Call.css';
 import Gallery from './Gallery';
@@ -16,12 +16,7 @@ import {
   CAM_OR_MIC_ERROR,
   FATAL_ERROR,
   callReducer,
-  isLocal,
-  isScreenShare,
-  containsScreenShare,
   getMessage,
-  isHost,
-  isGuest,
 } from '../callState';
 import { logDailyEvent } from '../../../logUtils';
 

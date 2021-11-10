@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import css from './Cue.css';
+import './Cue.css';
 import CallObjectContext from '../../CallObjectContext';
 
 const CUES = {

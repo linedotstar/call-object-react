@@ -1,5 +1,5 @@
 import React, { useContext, useCallback, useState } from 'react';
-import css from './TileControls.css';
+import './TileControls.css';
 import CallObjectContext from '../../../CallObjectContext';
 
 /* Props:
