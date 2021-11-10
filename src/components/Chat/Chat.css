@@ -21,11 +21,19 @@
 .chat-input {
   flex-grow: 1;
   font-size: 16px;
+  width: 90%;
 }
 
 .send-chat-button {
   display: inline-block;
   padding: 2px 5px;
-  background-color: #f2f2f2;
-  font-weight: bold;
+  background: #ce0058;
+  font-family: Helvetica Neue;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+  color: #ffffff;
+  background-color: #ce0058;
+  cursor: pointer;
+  border: 1px solid #ce0058;
 }
