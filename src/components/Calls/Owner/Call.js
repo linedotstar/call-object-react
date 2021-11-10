@@ -3,6 +3,7 @@ import '../Call.css';
 import './Call.css';
 import Tile from '../../Tile/Tile';
 import TileControls from './TileControls';
+import Chat from '../../Chat/Chat';
 import CallObjectContext from '../../../CallObjectContext';
 import CallMessage from '../../CallMessage/CallMessage';
 import {
@@ -149,13 +150,13 @@ export default function OwnerCall() {
     let tiles = [];
     Object.entries(callState.callItems).forEach(([id, callItem]) => {
       const tile = (
-        <div key={id}>
+        <div key={`participant-${id}`}>
           <Tile
             videoTrackState={callItem.videoTrackState}
             audioTrackState={callItem.audioTrackState}
-            isLocalPerson={isLocal(id)}
+            isLocalPerson={false}
             isLarge={false}
-            disableCornerMessage={isScreenShare(id)}
+            disableCornerMessage={true}
           />
           <TileControls 
             sessionId={callItem.sessionId}
@@ -175,12 +176,13 @@ export default function OwnerCall() {
   const message = getMessage(callState);
   return (
     <div className="call owner">
-      <div>
+      <div className='cue-controls'>
         <button onClick={() => updateCue(1)}>Cue 1</button>
         <button onClick={() => updateCue(2)}>Cue 2</button>
         <button onClick={() => updateCue(3)}>Cue 3</button>
       </div>
-      <div className="tiles">{tiles}</div>
+      <div className="gallery">{tiles}</div>
+      <Chat />
       {message && (
         <CallMessage
           header={message.header}

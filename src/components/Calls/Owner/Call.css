@@ -1,4 +1,18 @@
-.tiles {
+.call.owner {
+	display: grid;
+  grid-template-areas: 
+    "cue chat"
+    "gallery chat";
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 50px 1fr;
+}
+
+.call.owner .cue-controls {
+  grid-area:  cue;
+}
+
+.call.owner .gallery {
+  grid-area:  gallery;
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	grid-gap: 5vh 5vw;
