@@ -15,10 +15,21 @@
   grid-area:  gallery;
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
-	grid-gap: 5vh 5vw;
+	grid-template-rows: repeat(auto-fill, minmax(150px, 1fr));
+	grid-gap: 2vh 2vw;
 }
 
-.call.owner .tile.small {
-  border-radius: 4px !important;
-  width: 200px;
+.call.owner .gallery .participant {
+	position: relative;
+}
+
+.call.owner .gallery .participant .tile {
+	height: 100%;
+}
+
+.call.owner .gallery .participant .tile-controls {
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+	left: 0;
 }

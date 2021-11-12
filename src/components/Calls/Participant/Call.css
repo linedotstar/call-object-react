@@ -24,10 +24,3 @@
   max-height: 100%;
   max-width: 100%;
 }
-
-.call.participant .small-tiles {
-	grid-area:  gallery;
-	position: absolute;
-	left: 0;
-	bottom: 0;
-}

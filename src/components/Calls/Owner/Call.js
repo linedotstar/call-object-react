@@ -148,7 +148,7 @@ export default function OwnerCall() {
     let tiles = [];
     Object.entries(callState.callItems).forEach(([id, callItem]) => {
       const tile = (
-        <div key={`participant-${id}`}>
+        <div key={`participant-${id}`} className='participant'>
           <Tile
             videoTrackState={callItem.videoTrackState}
             audioTrackState={callItem.audioTrackState}
