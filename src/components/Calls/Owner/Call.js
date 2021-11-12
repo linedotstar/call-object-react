@@ -32,6 +32,7 @@ export default function OwnerCall() {
       callObject.updateParticipant(participant.session_id, {
         setSubscribedTracks: { audio: false, video: true, screenVideo: false },
       });
+      callObject.updateReceiveSettings({ [participant.session_id]: { video: { layer: 0 } } });
     }
 
     callObject.on('participant-joined', subscribeToParticipant);

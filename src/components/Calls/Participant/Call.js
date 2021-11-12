@@ -59,6 +59,7 @@ export default function Call() {
     function handleAppMessage(event) {
       if (event.data && event.data.sessionId && event.data.subscriptions) {
         callObject.updateParticipant(event.data.sessionId, { setSubscribedTracks: event.data.subscriptions });
+        callObject.updateReceiveSettings({ [event.data.sessionId]: 'inherit' });
         dispatch({
           type: GUEST_CHANGE,
           guestId: event.data.isGuest ? event.data.sessionId : null,

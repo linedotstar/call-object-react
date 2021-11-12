@@ -8,17 +8,26 @@ export default function Gallery(props) {
 	const { callState: { callItems, hostId, guestId } } = props;
   const { [hostId]: host, [guestId]: guest, local, ...items } = callItems;
 
+  const sessionIds = Object.values(items).map((item) => item.sessionId).sort();
   const eligibleIds = Object.values(items).filter((item) => 
       ['sendable', 'playable'].includes((item.videoTrackState || {}).state)
     ).map((item) => item.sessionId).sort().slice(0, 12);
 
   useEffect(() => {
+    if (!callObject) {
+      return;
+    }
+
+    let receiveSettingsList = {};
     let updateList = {};
-    Object.values(items).forEach((item) => (
-      updateList[item.sessionId] = { setSubscribedTracks: { video: eligibleIds.includes(item.sessionId) } }
-    ));
-    callObject && callObject.updateParticipants(updateList);
-  }, [eligibleIds]);
+    sessionIds.forEach((sessionId) => {
+      const isEligible = eligibleIds.includes(sessionId);
+      receiveSettingsList[sessionId] = isEligible ? { video: { layer: 0 } } : 'inherit';
+      updateList[sessionId] = { setSubscribedTracks: { video: isEligible } };
+    });
+    callObject.updateReceiveSettings(receiveSettingsList);
+    callObject.updateParticipants(updateList);
+  }, [callObject, sessionIds, eligibleIds]);
 
   const members = eligibleIds.map((memberId) => items[memberId]).filter((member) => (member.videoTrackState || {}).state === 'playable');
 
