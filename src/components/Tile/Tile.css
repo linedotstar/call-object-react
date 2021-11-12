@@ -33,8 +33,8 @@
   z-index: 10;
   box-shadow: 0px 0px 25px #000;
   width: 25vw !important;
+  height: calc(9 / 16 * 25vw) !important;
   max-width: 200px;
-  height: 14vw !important;
 }
 
 .tile .overlay {
