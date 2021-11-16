@@ -1,4 +1,5 @@
-import React, { useEffect, useContext, useReducer, useState } from 'react';
+import React, { useEffect, useContext, useReducer, useRef } from 'react';
+import useState from 'react-usestateref';
 import '../Call.css';
 import './Call.css';
 import Tile from '../../Tile/Tile';
@@ -21,8 +22,8 @@ import { logDailyEvent } from '../../../logUtils';
 export default function OwnerCall() {
   const callObject = useContext(CallObjectContext);
   const [callState, dispatch] = useReducer(callReducer, initialCallState);
-  const [queue, setQueue] = useState([]);
-
+  const [queue, setQueue, queueRef] = useState([]);
+  
   /**
    * Subscribe to audience tracks when they join.
    */
@@ -53,7 +54,7 @@ export default function OwnerCall() {
       
       const { sessionId, isRaised } = data;
 
-      let newQueue = [...queue];
+      let newQueue = [...queueRef.current];
       if (isRaised) {
         newQueue.push(sessionId);
       } else {
