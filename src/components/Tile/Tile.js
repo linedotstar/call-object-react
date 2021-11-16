@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { AspectRatio } from 'react-aspect-ratio';
 import './Tile.css';
+import Icon, { TYPE_RAISE } from '../Icon/Icon';
 
 function getTrackUnavailableMessage(kind, trackState) {
   if (!trackState) return;
@@ -118,6 +119,12 @@ export default function Tile(props) {
     );
   }
 
+  function getQueueStatus() {
+    return (
+      props.isQueued && <div className='in-queue'><Icon type={TYPE_RAISE} /></div>
+    );
+  }
+
   function getClassNames() {
     let classNames = 'tile';
     props.isPiP && (classNames += ' pip');
@@ -132,6 +139,7 @@ export default function Tile(props) {
       {getVideoComponent()}
       {getAudioComponent()}
       {getCornerMessageComponent()}
+      {getQueueStatus()}
     </div>
   );
 }

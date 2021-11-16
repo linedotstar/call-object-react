@@ -59,3 +59,16 @@
   font-size: 14px;
   line-height: 17px;
 }
+
+.tile .in-queue {
+  position: absolute;
+  background-color: rgba(0,0,0,0.2);
+  padding: 10px;
+  margin: 0;
+  top: 0;
+  left: 0;
+}
+
+.tile .in-queue path {
+  fill: #ffffff !important;
+}

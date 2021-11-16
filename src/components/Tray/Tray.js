@@ -3,6 +3,7 @@ import './Tray.css';
 import TrayButton, {
   TYPE_MUTE_CAMERA,
   TYPE_MUTE_MIC,
+  TYPE_RAISE,
   TYPE_LEAVE,
 } from '../TrayButton/TrayButton';
 import CallObjectContext from '../../CallObjectContext';
@@ -38,6 +39,7 @@ export default function Tray(props) {
   const callObject = useContext(CallObjectContext);
   const [isCameraMuted, setCameraMuted] = useState(false);
   const [isMicMuted, setMicMuted] = useState(false);
+  const [isRaised, setRaised] = useState(false);
 
   function toggleCamera() {
     callObject.setLocalVideo(isCameraMuted);
@@ -45,6 +47,10 @@ export default function Tray(props) {
 
   function toggleMic() {
     callObject.setLocalAudio(isMicMuted);
+  }
+
+  function raiseHand() {
+    setRaised(!isRaised);
   }
 
   function leaveCall() {
@@ -79,6 +85,16 @@ export default function Tray(props) {
     };
   }, [callObject]);
 
+  // broadcast the raised hand
+  useEffect(() => {
+    if (!callObject) return;
+
+    const { local } = callObject.participants();
+    if (local) {
+      callObject.sendAppMessage({ sessionId: local.session_id, isRaised });
+    }
+  }, [callObject, isRaised]);
+
   return (
     <div className="tray">
 
@@ -96,6 +112,12 @@ export default function Tray(props) {
         onClick={toggleMic}
       />
       <DeviceSelector type='audio' />
+      <TrayButton
+        type={TYPE_RAISE}
+        disabled={props.disabled}
+        highlighted={isRaised}
+        onClick={raiseHand}
+      />
       <TrayButton
         type={TYPE_LEAVE}
         disabled={props.disabled}

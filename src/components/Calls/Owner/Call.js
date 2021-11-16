@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useReducer } from 'react';
+import React, { useEffect, useContext, useReducer, useState } from 'react';
 import '../Call.css';
 import './Call.css';
 import Tile from '../../Tile/Tile';
@@ -21,6 +21,7 @@ import { logDailyEvent } from '../../../logUtils';
 export default function OwnerCall() {
   const callObject = useContext(CallObjectContext);
   const [callState, dispatch] = useReducer(callReducer, initialCallState);
+  const [queue, setQueue] = useState([]);
 
   /**
    * Subscribe to audience tracks when they join.
@@ -41,6 +42,33 @@ export default function OwnerCall() {
     return function cleanup() {
       callObject.off('participant-joined', subscribeToParticipant);
     };
+  }, [callObject]);
+
+  // subscribe to app messages listening for raised hands
+  useEffect(() => {
+    if (!callObject) { return; }
+
+    function handleRaisedHandMessage({ data }) {
+      if (!('isRaised' in data)) { return; }
+      
+      const { sessionId, isRaised } = data;
+
+      let newQueue = [...queue];
+      if (isRaised) {
+        newQueue.push(sessionId);
+      } else {
+        newQueue = newQueue.filter((id) => id !== sessionId);
+      }
+
+      setQueue(newQueue);
+    }
+
+    callObject.on('app-message', handleRaisedHandMessage);
+
+    return function cleanup() {
+      callObject.off('app-message', handleRaisedHandMessage);
+    };
+
   }, [callObject]);
 
   /**
@@ -155,6 +183,7 @@ export default function OwnerCall() {
             audioTrackState={callItem.audioTrackState}
             isLocalPerson={false}
             disableCornerMessage={true}
+            isQueued={queue.includes(callItem.sessionId)}
           />
           <TileControls 
             sessionId={callItem.sessionId}
